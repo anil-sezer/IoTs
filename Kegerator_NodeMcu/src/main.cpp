@@ -12,6 +12,8 @@ const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWORD;
 const char* apiEndpoint = API_ENDPOINT;
 
+KegeratorsDirective getDirectives();
+
 
 void setup() {
     Serial.begin(115200);

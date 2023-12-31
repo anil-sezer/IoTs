@@ -119,7 +119,7 @@
                 "ARDUINO_ESP8266_NODEMCU_ESP12E",
                 "WIFI_SSID=\"BigBadaBoom2.4\"",
                 "WIFI_PASSWORD=\"ace_combat\"",
-                "API_ENDPOINT=\"http://192.168.1.105:30002/Iot/SunriseAlarmClockCheck\"",
+                "API_ENDPOINT=\"http://192.168.1.105:30002/Iot/GetIotDirectives\"",
                 "F_CPU=80000000L",
                 "__ets__",
                 "ICACHE_FLASH",

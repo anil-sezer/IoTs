@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+// https://lastminuteengineers.com/i2c-lcd-arduino-tutorial/
+
 void setup() {
   Wire.begin();
 

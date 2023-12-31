@@ -6,10 +6,8 @@
 #include <ArduinoJson.h>
 
 const char* ssid = WIFI_SSID;
-// const char* ssid = "Huff Puff Puff 2.4";
 const char* password = WIFI_PASSWORD;
 const char* apiEndpoint = API_ENDPOINT;
-// const char* apiEndpoint = "http://192.168.1.105:30002/Iot/SunriseAlarmClockCheck";
 
 const int aMinute = 1000 * 60;
 

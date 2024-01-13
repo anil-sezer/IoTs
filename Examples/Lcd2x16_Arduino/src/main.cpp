@@ -7,6 +7,8 @@
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
 
+void displayText(String text);
+
 // make some custom characters:
 byte Heart[8] = {
 0b00000,
@@ -102,15 +104,7 @@ byte Lock[8] = {
 void setup() {
   lcd.init();
   lcd.clear();         
-  lcd.backlight();      // Make sure backlight is on
-  
-  
-  // Print a message on both lines of the LCD.
-  // lcd.setCursor(0,0);   //Set cursor to character 2 on line 0
-  // lcd.print("Cur. Temp: 19.02");
-  
-  // lcd.setCursor(0,1);   //Move cursor to character 2 on line 1
-  // lcd.print("Tar. Temp: 22.00");
+  lcd.backlight();
 
   // create a new characters
   lcd.createChar(0, Heart);
@@ -155,4 +149,18 @@ void setup() {
 }
 
 void loop() {
+}
+
+void displayText(String text)
+{
+    lcd.clear();
+    lcd.setCursor(0,0);
+
+    if(text.length() > 16){
+      lcd.print(text.substring(0, 16));
+      lcd.setCursor(0,1);
+      lcd.print(text.substring(16, 32));
+    } else {
+      lcd.print(text);
+    }
 }

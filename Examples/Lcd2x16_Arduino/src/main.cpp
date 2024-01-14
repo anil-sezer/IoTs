@@ -1,10 +1,11 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
+#include "display_2x16lcd.h"
 
 // https://lastminuteengineers.com/i2c-lcd-arduino-tutorial/
 // The first screen I got is at: 0x27
 
-LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
+// LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
 
 void displayText(String text);
@@ -102,9 +103,11 @@ byte Lock[8] = {
 };
 
 void setup() {
+  Serial.begin(115200);
+  Serial.println("Ready to roll!\n****************************************");
   lcd.init();
   lcd.clear();         
-  lcd.backlight();
+  // lcd.backlight();
 
   // create a new characters
   lcd.createChar(0, Heart);
@@ -149,18 +152,4 @@ void setup() {
 }
 
 void loop() {
-}
-
-void displayText(String text)
-{
-    lcd.clear();
-    lcd.setCursor(0,0);
-
-    if(text.length() > 16){
-      lcd.print(text.substring(0, 16));
-      lcd.setCursor(0,1);
-      lcd.print(text.substring(16, 32));
-    } else {
-      lcd.print(text);
-    }
 }

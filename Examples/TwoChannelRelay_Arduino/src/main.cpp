@@ -5,7 +5,7 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Ready to roll!\n****************************************");
 
-  initializeRelay(5);
+  initializeRelay(D8);
 }
 
 void loop() {

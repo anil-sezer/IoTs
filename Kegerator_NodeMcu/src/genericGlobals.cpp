@@ -1,4 +1,4 @@
 #include "genericGlobals.h"
 
-int oneSecond = 1000;
-long oneMinute = 60000;
+const int oneSecond = 1000;
+const long oneMinute = 60000;

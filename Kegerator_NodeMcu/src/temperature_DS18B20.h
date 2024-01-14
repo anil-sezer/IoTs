@@ -4,7 +4,7 @@
 
 float getTemp(void);
 bool isTempIsNotBugged(float temp);
-float errorResistance(float temp);
-void initializeTemperatureSensor();
+std::array<float, 2> getTempWithErrorResistance(void);
+std::array<float, 2> initializeTemperatureSensor();
 
 extern DallasTemperature sensors;

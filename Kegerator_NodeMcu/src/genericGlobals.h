@@ -1,2 +1,2 @@
-extern int oneSecond;
-extern long oneMinute;
+extern const int oneSecond;
+extern const long oneMinute;

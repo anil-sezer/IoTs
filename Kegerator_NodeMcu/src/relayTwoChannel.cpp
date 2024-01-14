@@ -1,11 +1,18 @@
 #include "relayTwoChannel.h"
 
 // Only used 1 channel
-const int relayPin = D1;
+uint8_t relayPin;
 
-void initializeRelay(){
+void initializeRelay(uint8_t pin){
+    relayPin = pin;
+    
     pinMode(relayPin, OUTPUT);
-    digitalWrite(relayPin, HIGH);
+
+    Serial.println("Relay will flip:");
+    relayOn();
+    delay(oneSecond * 2);
+    relayOff();
+    Serial.println("Relay ready!");
 }
 
 void relayOn(){
@@ -16,4 +23,8 @@ void relayOn(){
 void relayOff(){
     digitalWrite(relayPin, HIGH);
     digitalWrite(LED_BUILTIN, HIGH);
+}
+
+int relayStatus(){
+    return digitalRead(relayPin);
 }

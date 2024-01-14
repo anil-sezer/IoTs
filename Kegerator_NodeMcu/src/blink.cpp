@@ -2,6 +2,8 @@
 
 void InitializeInternalLed(){
   pinMode(LED_BUILTIN, OUTPUT);
+  Serial.println("Internal led ready.");
+  blinkWhileDelaying(1000,300);
 }
 
 void blinkWhileDelaying(long delayAmount, int blinkFrequency)

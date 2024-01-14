@@ -1,5 +1,7 @@
 #include <Arduino.h>
+#include "genericGlobals.h"
 
-void initializeRelay();
+void initializeRelay(uint8_t pin);
 void relayOn();
 void relayOff();
+int relayStatus();

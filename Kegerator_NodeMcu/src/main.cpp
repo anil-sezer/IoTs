@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
+#include "temperature_DHT11.h"
 #include "dto/KegeratorsDirectiveDto.h"
-#include "temperature_DS18B20.h"
 #include "relayTwoChannel.h"
 #include "display_2x16lcd.h"
 #include "genericGlobals.h"
@@ -29,13 +29,21 @@ bool isFridgeIsOn = false;
 long cooldownPeriod = oneMinute * 2;
 KegeratorsDirectiveDto directives = KegeratorsDirectiveDto(Init);
 
+float temp = -1;
+float humidity = -1;
+
 void setup() {
     Serial.begin(115200);
     Serial.println("Ready to roll!\n****************************************");
 
     InitializeInternalLed();
     initializeRelay(D8);
-    initializeTemperatureSensor();
+    initializeTemperatureAndMoistureSensor();
+    delay(sensorMinimumDelay);
+    std::array<float, 2> result = getTempAndHumidity();
+    temp = result[0];
+    humidity = result[1];
+
     connectToWifi(ssid, password);
     directives = getDirectives();
     // initializeDisplay16x2Lcd(); // Open up later
@@ -45,26 +53,21 @@ void setup() {
 void loop() {
   Serial.println("Loop started");
   blinkWhileDelaying(oneSecond, oneSecond / 2);
-  float temp;
-  float timeSpentToGetTemp = 0;
 
   if(timeSinceLastTempCheck > directives.tempCheckInterval){
-    std::array<float, 2> result = getTempWithErrorResistance();
+    std::array<float, 2> result = getTempAndHumidity();
     temp = result[0];
-    timeSpentToGetTemp = result[1];
-
-    if(timeSpentToGetTemp > 0){
-      Serial.println("Spent " + String(timeSpentToGetTemp/oneSecond) + " seconds to get temp");
-    }
+    humidity = result[1];
 
     timeSinceLastTempCheck = 0;
-    timeSinceLastReport += timeSpentToGetTemp;
+
+    // displayTemperatures(temp, directives.minTemp, directives.maxTemp);
+    // isFridgeIsOn = FridgeControls(temp, directives, timeSpentToGetTemp);
+    isFridgeIsOn = FridgeControls(temp, directives, 0);
   } else {
     Serial.println("Will check the temp ~" + String((directives.tempCheckInterval - timeSinceLastTempCheck) / 1000) + " seconds later");
   }
 
-  displayTemperatures(temp, directives.minTemp, directives.maxTemp);
-  isFridgeIsOn = FridgeControls(temp, directives, timeSpentToGetTemp);
 
   if(timeSinceLastReport > directives.reportInterval){
     sendReport(temp, isFridgeIsOn);
@@ -132,9 +135,9 @@ void sendReport(float temp, bool isFridgeIsOn) {
 
 bool FridgeControls(float temp, KegeratorsDirectiveDto directives, float timeSpentToGetTemp)
 {
-  if(compressorOverheatingFailsafeTrigger(timeSpentToGetTemp)){
-    return false;
-  }
+  // if(compressorOverheatingFailsafeTrigger(timeSpentToGetTemp)){
+  //   return false;
+  // }
 
   if (temp > directives.minTemp && temp < directives.maxTemp)
   {
@@ -143,13 +146,7 @@ bool FridgeControls(float temp, KegeratorsDirectiveDto directives, float timeSpe
     relayOff();
     return false;
   }
-  else if(!isTempIsNotBugged(temp)){
-    Serial.println("Looks like a buggy temp, SUSPEND. Temp: " + String(temp, 3));
-    consecutiveWorkingTimeOfTheFridge = 0;
-    relayOff();
-    return false;
-  }
-  else if (temp < directives.minTemp)
+  else if (temp > 0 && temp < directives.minTemp)
   {
     Serial.println("Temperature is low, SUSPEND. Temp: " + String(temp, 3));
     consecutiveWorkingTimeOfTheFridge = 0;
@@ -164,7 +161,7 @@ bool FridgeControls(float temp, KegeratorsDirectiveDto directives, float timeSpe
   }
 
   Serial.println("Bug! Code should have never reached here. " + String(temp, 3));
-  displayText("BUG!!");
+  // displayText("BUG!!");
   relayOff();
   return false;
 }
@@ -174,7 +171,7 @@ bool compressorOverheatingFailsafeTrigger(float timeSpentToGetTemp)
 {
   handleFridgeCooldownTimer(timeSpentToGetTemp);
 
-  if (relayStatus() == LOW && isFridgeIsOn)
+  if (relayStatus() == HIGH && !isFridgeIsOn)
   {
     consecutiveWorkingTimeOfTheFridge = 0;
     return false;
@@ -187,7 +184,7 @@ bool compressorOverheatingFailsafeTrigger(float timeSpentToGetTemp)
   {
     return false;
   }
-  remainingCooldownTime = 
+  remainingCooldownTime = 0; // bug!
   
   Serial.print("Compressor needs to cool down for " + String(cooldownPeriod/oneMinute) + " minutes... ");
   relayOff();

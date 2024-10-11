@@ -1,0 +1,2 @@
+void setupIrReceiver();
+int checkForData();

@@ -1,7 +1,10 @@
 #include "apiRequests.h"
 
+byte consecutiveRequestErrorCount = 0;
+const byte maxAllowedConsecutiveErrorCount = 0;
+
 String SendGetRequest(WiFiClient client, String apiEndpoint){
-  Serial.println("EET: " + apiEndpoint);
+  Serial.println("GET: " + apiEndpoint);
 
     HTTPClient http;
     http.begin(client, apiEndpoint);
@@ -20,6 +23,14 @@ String SendGetRequest(WiFiClient client, String apiEndpoint){
     Serial.print("Error on sending GET: ");
     Serial.println(httpResponseCode);
     http.end();
+    consecutiveRequestErrorCount++;
+
+    if(consecutiveRequestErrorCount < maxAllowedConsecutiveErrorCount){
+      SendGetRequest(client, apiEndpoint);
+      Serial.println("Retrying:");
+    }
+
+    Serial.print("Cannot access endpoint, there might be a problem with the server.");
     return "";
 }
 

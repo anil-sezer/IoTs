@@ -1,13 +1,13 @@
 #include <Arduino.h>
 
-#include "temperature_DHT11.h"
+#include "generic/DHT11_Temperature_NodeMcuV3.h"
 #include "dto/KegeratorsDirectiveDto.h"
-#include "relayTwoChannel.h"
-#include "display_2x16lcd.h"
-#include "genericGlobals.h"
-#include "apiRequests.h"
-#include "blink.h"
-#include "wifi.h"
+#include "generic/relayTwoChannel.h"
+#include "generic/display_2x16lcd.h"
+#include "generic/genericGlobals.h"
+#include "generic/apiRequests.h"
+#include "generic/blink.h"
+#include "generic/wifi.h"
 
 KegeratorsDirectiveDto getDirectives();
 bool FridgeControls(float temp, KegeratorsDirectiveDto directives, float timeSpentToGetTemp);

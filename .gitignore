@@ -5,3 +5,11 @@
 .vscode/ipch
 
 local_config.ini
+
+MicroControllerApi/bin/
+MicroControllerApi/obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea
+.env

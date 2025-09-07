@@ -1,0 +1,100 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-api-deployment
+  namespace: portfolio
+spec:
+  replicas: 1
+  revisionHistoryLimit: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+  minReadySeconds: 5
+  progressDeadlineSeconds: 120
+  selector:
+    matchLabels:
+      app: iot-api
+  template:
+    metadata:
+      labels:
+        app: iot-api
+    spec:
+      serviceAccountName: k8s-stats-service
+      containers:
+        - name: iot-api
+          image: imgregistry.anil-sezer.com/iot-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /liveness
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 8080
+            timeoutSeconds: 1
+            periodSeconds: 60
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 1
+            periodSeconds: 60
+            failureThreshold: 3
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+
+            - name: TZ
+              value: "Europe/Istanbul"
+
+            - name: SQL_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: iot-secrets
+                  key: SQL_DB_HOST
+
+            - name: SQL_DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: iot-secrets
+                  key: SQL_DB_PORT
+
+            - name: SQL_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: iot-secrets
+                  key: SQL_DB_USER
+
+            - name: SQL_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: iot-secrets
+                  key: SQL_DB_PASSWORD
+
+            - name: SQL_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: iot-secrets
+                  key: SQL_DB_NAME
+
+            - name: NOTIFICATION_TELEGRAM_CHAT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: iot-secrets
+                  key: NOTIFICATION_TELEGRAM_CHAT_ID
+
+            - name: NOTIFICATION_TELEGRAM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: iot-secrets
+                  key: NOTIFICATION_TELEGRAM_API_KEY

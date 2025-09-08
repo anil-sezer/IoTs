@@ -17,10 +17,6 @@ public static class EnvVars
     public static int TEMPERATURE_CHECK_INTERVAL => GetValue<int>("TEMPERATURE_CHECK_INTERVAL");
     public static int COOLDOWN_PERIOD => GetValue<int>("COOLDOWN_PERIOD");
     
-    // Notification
-    public static string NOTIFICATION_TELEGRAM_API_KEY => GetValue("NOTIFICATION_TELEGRAM_API_KEY");
-    public static string NOTIFICATION_TELEGRAM_CHAT_ID => GetValue("NOTIFICATION_TELEGRAM_CHAT_ID");
-    
     // Database
     public static string SQL_DB_HOST => GetValue("SQL_DB_HOST");
     public static string SQL_DB_PORT => GetValue("SQL_DB_PORT");
@@ -46,9 +42,6 @@ public static class EnvVars
         _ = SQL_DB_USER;
         _ = SQL_DB_NAME;
         _ = SQL_DB_PASSWORD;
-
-        _ = NOTIFICATION_TELEGRAM_API_KEY;
-        _ = NOTIFICATION_TELEGRAM_CHAT_ID;
 
         _ = MINIMUM_TEMPERATURE;
         _ = MAXIMUM_TEMPERATURE;

@@ -86,15 +86,3 @@ spec:
                 secretKeyRef:
                   name: iot-secrets
                   key: SQL_DB_NAME
-
-            - name: NOTIFICATION_TELEGRAM_CHAT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: iot-secrets
-                  key: NOTIFICATION_TELEGRAM_CHAT_ID
-
-            - name: NOTIFICATION_TELEGRAM_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: iot-secrets
-                  key: NOTIFICATION_TELEGRAM_API_KEY

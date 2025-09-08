@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: iot-api-deployment
-  namespace: portfolio
+  namespace: iot
 spec:
   replicas: 1
   revisionHistoryLimit: 30
@@ -22,7 +22,8 @@ spec:
       labels:
         app: iot-api
     spec:
-      serviceAccountName: k8s-stats-service
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: iot-api
           image: imgregistry.anil-sezer.com/iot-api:latest

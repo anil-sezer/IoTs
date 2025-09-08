@@ -30,4 +30,8 @@
         <PackageReference Include="Scalar.AspNetCore" Version="2.4.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="MicroControllerApi.sln.DotSettings.user" />
+    </ItemGroup>
+
 </Project>

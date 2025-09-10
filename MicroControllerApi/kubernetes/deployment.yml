@@ -52,6 +52,21 @@ spec:
             periodSeconds: 60
             failureThreshold: 3
           env:
+            - name: MINIMUM_TEMPERATURE
+              value: "20"
+
+            - name: MAXIMUM_TEMPERATURE
+              value: "23"
+
+            - name: REPORT_INTERVAL
+              value: "60000"
+
+            - name: COOLDOWN_PERIOD
+              value: "60000"
+
+            - name: TEMPERATURE_CHECK_INTERVAL
+              value: "5000"
+            
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
 

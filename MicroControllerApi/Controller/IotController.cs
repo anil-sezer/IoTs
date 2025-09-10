@@ -10,7 +10,7 @@ namespace MicroControllerApi.Controller;
 public class IotController(ApiDbContext dbContext) : ControllerBase
 {
     // {"MinTemp":20,"MaxTemp":23,"ReportInterval":60000,"TempCheckInterval":5000,"CooldownPeriod":600000}
-    [HttpGet(Name = "Directives")]
+    [HttpGet("Directives")]
     public ActionResult<DirectivesResponse> Get()
     {
         return Ok(new DirectivesResponse
@@ -24,7 +24,7 @@ public class IotController(ApiDbContext dbContext) : ControllerBase
     }
     
     // String body = "{\"DeviceName\": \"Kegerator\",\"Report\": {\"Temp\":" + tempAsString + ",\"IsFridgeIsOn\":" + isFridgeIsOnAsString + "} }";
-    [HttpPost(Name = "ReportState")]
+    [HttpPost("ReportState")]
     public async Task<IActionResult> Set([FromBody] ReportRequest request)
     {
         dbContext.IotReports.Add(new IotReport
